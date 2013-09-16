@@ -1,2 +1,3 @@
 put in cm7/device/zte/n780
 extract files from n780
+setup to let it use kernel.P020121010542808168083 for both system & recovery
