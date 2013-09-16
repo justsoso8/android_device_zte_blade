@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-LOCAL_PATH := device/zte/blade/
+LOCAL_PATH := device/zte/n780/
 
 #
 # Boot files
 #
 #ifeq ($(TARGET_PREBUILT_KERNEL),)
-TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel
+TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel.P020121010542808168083
 #endif
 
 file := $(INSTALLED_KERNEL_TARGET)

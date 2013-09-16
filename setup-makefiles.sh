@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-DEVICE=blade
+DEVICE=n780
 
 mkdir -p ../../../vendor/zte/$DEVICE
 

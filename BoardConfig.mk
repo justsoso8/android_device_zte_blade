@@ -31,7 +31,7 @@ BOARD_NO_RGBX_8888 := true
 
 TARGET_NO_BOOTLOADER := true
 
-TARGET_PREBUILT_RECOVERY_KERNEL := device/zte/blade/recovery_kernel
+TARGET_PREBUILT_RECOVERY_KERNEL := device/zte/n780/kernel.P020121010542808168083
 
 BOARD_KERNEL_CMDLINE := androidboot.hardware=blade console=ttyMSM2,115200  g_android.product_id=0x1354
 
