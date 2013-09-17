@@ -1,0 +1,29 @@
+#! /system/bin/sh
+
+echo "ip up" >> /data/local/logs/ppptunl.log
+
+echo "seprop net.ppp0.dns1 $DNS1" >> /data/local/logs/ppptunl.log
+/system/bin/setprop net.ppp0.dns1 "$DNS1"
+
+
+echo "seprop net.ppp0.dns2 $DNS2" >> /data/local/logs/ppptunl.log
+/system/bin/setprop net.ppp0.dns2 "$DNS2"
+
+
+echo "seprop net.dns1 $DNS1" >> /data/local/logs/ppptunl.log
+/system/bin/setprop net.dns1 "$DNS1"
+
+
+echo "seprop net.dns2 $DNS2" >> /data/local/logs/ppptunl.log
+/system/bin/setprop net.dns2 "$DNS2"
+
+
+echo "ip up"  >> /data/local/logs/ppp.log
+pwd >> /data/local/logs/ppp.log
+date >> /data/local/logs/ppp.log
+
+echo "IPLOCAL  $IPLOCAL" >> /data/local/logs/ppp.log
+/system/bin/setprop net.ppp0.ipaddr "$IPLOCAL"
+
+echo "IFNAME  $IFNAME" >> /data/local/logs/ppp.log
+/system/bin/setprop net.ppp0.iface "$IFNAME"

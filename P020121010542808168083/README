@@ -1,0 +1,4 @@
+unpack-img.pl boot.img
+unpack-img.pl recovery.img
+
+boot.img-kernel.gz = recovery-kernel.gz = kernel
