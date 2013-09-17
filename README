@@ -1,3 +1,7 @@
 put in cm7/device/zte/n780
-extract files from n780
-setup to let it use kernel.P020121010542808168083 for both system & recovery
+extract_files to vendor/zte/n780
+setup to let it use P020121010542808168083/kernel for both system & recovery
+
+DFU: up+down+power 10s
+FTM: down+power
+REC: up+dail+power
