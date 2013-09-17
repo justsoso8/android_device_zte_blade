@@ -2,6 +2,14 @@ put in cm7/device/zte/n780
 extract_files to vendor/zte/n780
 setup to let it use P020121010542808168083/kernel for both system & recovery
 
-DFU: up+down+power 10s
 FTM: down+power
-REC: up+dail+power
+REC: up+dial+power
+
+keycode:
+102 HOME
+135 MENU
+158 RETURN
+231 DIAL
+107 END
+115 UP
+114 DOWN
