@@ -1,0 +1,135 @@
+#!/system/bin/sh
+
+urldecode()
+{
+	busybox echo "$1" | busybox awk '
+	BEGIN { 
+		for (i=0;i<=16;i++) hex[sprintf("%X",i)]=i;
+	}
+	{ 
+		for (i=1;i<=length($0);i++)
+		{ 
+			c=substr($0,i,1); 
+			if (c=="+") printf (" ");
+			else if (c=="%") printf ("%c",hex[substr($0,++i,1)]*16+hex[substr($0,++i,1)]);
+			else  printf (c);
+		}
+	}
+	'
+}
+
+mountrw()
+{
+	mountrw_v1=`busybox echo "$1" | busybox sed 's#/[^/]*#gyh#'`
+	if [ $mountrw_v1 == "gyh" ]; then
+		busybox mount -o remount,rw /
+	else
+		mountrw_v1=`busybox echo "$1" | busybox sed 's#/[^/]*#&%gyh%#' | busybox sed 's#%gyh%.*##g'`
+		if [ $mountrw_v1 == "/system" ]||[ $mountrw_v1 == "/etc" ]; then
+			busybox mount -o remount,rw /system
+		fi
+	fi
+}
+
+lsdir()
+{
+	lsdir_v1=`urldecode $1`
+	if [ -d "$lsdir_v1" ]||[ -f "$lsdir_v1" ]; then
+		busybox ls -a -l -e --color=never "$lsdir_v1"
+	else
+		busybox echo '0'
+	fi
+}
+
+init_dir()
+{
+	mountrw "$1"
+	if [ ! -d "$1" ]; then
+		busybox mkdir -p "$1"
+	fi
+}
+
+mk_dir()
+{
+	mk_dir_v1=`urldecode $1`
+	init_dir "$mk_dir_v1"
+}
+
+rm_dir()
+{
+	rm_dir_v1=`urldecode $1`
+	mountrw "$rm_dir_v1"
+	if [ -d "$rm_dir_v1" ]; then
+		busybox rm -r "$rm_dir_v1"
+	fi
+}
+
+rm_file()
+{
+	rm_file_v1=`urldecode $1`
+	mountrw "$rm_file_v1"
+	if [ -f "$rm_file_v1" ]; then
+		busybox rm "$rm_file_v1"
+	fi
+}
+
+mv_file()
+{
+	mv_file_v1=`urldecode $1`
+	mv_file_v2=`urldecode $2`
+	mv_file_d=`busybox echo "$mv_file_v2" | busybox sed 's/\/[^\/]*$/\//'`
+	init_dir "$mv_file_d"
+	if [ -f "$mv_file_v1" ]||[ -d "$mv_file_v1" ]; then
+		busybox mv -f "$mv_file_v1" "$mv_file_v2"
+	fi
+}
+
+cp_file()
+{
+	cp_file_v1=`urldecode $1`
+	cp_file_v2=`urldecode $2`
+	cp_file_d=`busybox echo "$cp_file_v2" | busybox sed 's/\/[^\/]*$/\//'`
+	init_dir "$cp_file_d"
+	if [ -d "$cp_file_v1" ]; then
+		busybox cp -r -f "$cp_file_v1" "$cp_file_v2"
+	elif [ -f "$cp_file_v1" ]; then
+		busybox cp -f "$cp_file_v1" "$cp_file_v2"
+	fi
+}
+
+chmod_file()
+{
+	chmod_file_v1=`urldecode $2`
+	mountrw "$chmod_file_v1"
+	busybox chmod $1 "$chmod_file_v1"
+}
+
+file_exists()
+{
+	file_exists_v1=`urldecode $1`
+	if [ -f "$file_exists_v1" ]||[ -d "$file_exists_v1" ]; then
+		busybox echo '1'
+	else
+		busybox echo '0'
+	fi
+}
+
+if [ "$1" == "ls" ]; then
+	lsdir $2
+elif [ "$1" == "file_exists" ]; then
+	file_exists $2
+elif [ "$1" == "mv" ]; then
+	mv_file $2 $3
+elif [ "$1" == "cp" ]; then
+	cp_file $2 $3
+elif [ "$1" == "rm" ]; then
+	rm_file $2
+elif [ "$1" == "mkdir" ]; then
+	mk_dir $2
+elif [ "$1" == "rmdir" ]; then
+	rm_dir $2
+elif [ "$1" == "chmod" ]; then
+	chmod_file $2 $3
+else
+	busybox echo "reshtest"
+fi
